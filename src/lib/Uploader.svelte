@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { createFileChunks } from "./uploader";
+  import { createFileChunks, uploadFileChunk } from "./uploader";
 
-  let file = null
+  let file: File = null
   let fileInputActive = false
 
   /** 点击时，获取选中的文件 */
@@ -35,6 +35,7 @@
 
   const handleUpload = () => {
     const fileChunks = createFileChunks(file)
+    fileChunks.forEach(chunk => uploadFileChunk(file.name, chunk))
   }
 </script>
 

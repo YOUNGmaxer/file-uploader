@@ -24,6 +24,26 @@ const createFileChunks = (largeFile: File): FileChunk[] => {
   return fileChunks
 }
 
+/** 上传文件块 */
+const uploadFileChunk = async (fileName: string, chunk: FileChunk): Promise<void> => {
+  try {
+    const formData = new FormData()
+    formData.append('chunk', chunk.chunk)
+    formData.append('hash', chunk.hash)
+    formData.append('fileName', fileName)
+
+    const res = await fetch('http://localhost:8888/upload-chunk', {
+      method: 'POST',
+      body: formData
+    })
+    const data = await res.json();
+    console.log(data)
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export {
-  createFileChunks
+  createFileChunks,
+  uploadFileChunk
 }
