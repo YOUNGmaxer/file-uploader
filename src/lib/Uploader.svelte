@@ -1,45 +1,49 @@
 <script lang="ts">
-let file = null
-let fileInputActive = false
+  import { createFileChunks } from "./uploader";
 
-/** 点击时，获取选中的文件 */
-const handleFileChange = (e) => {
-  const [_file] = e.target.files
-  if (!_file) return
-  file = _file
-}
+  let file = null
+  let fileInputActive = false
 
-/** 拖拽时，获取选中的文件 */
-const handleDrop = (e: DragEvent) => {
-  e.preventDefault()
-  fileInputActive = false
+  /** 点击时，获取选中的文件 */
+  const handleFileChange = (e) => {
+    const [_file] = e.target.files
+    if (!_file) return
+    file = _file
+  }
 
-  const [_file] = e.dataTransfer.files
-  if (!_file) return
-  file = _file
-}
+  /** 拖拽时，获取选中的文件 */
+  const handleDrop = (e: DragEvent) => {
+    e.preventDefault()
+    fileInputActive = false
 
-/** 文件拖拽进指定区域时 */
-const handleDragOver = (e: DragEvent) => {
-  e.preventDefault()
-  fileInputActive = true
-}
+    const [_file] = e.dataTransfer.files
+    if (!_file) return
+    file = _file
+  }
 
-/** 文件拖拽离开指定区域时 */
-const handleDragLeave = (e: DragEvent) => {
-  e.preventDefault()
-  fileInputActive = false
-}
+  /** 文件拖拽进指定区域时 */
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+    fileInputActive = true
+  }
 
+  /** 文件拖拽离开指定区域时 */
+  const handleDragLeave = (e: DragEvent) => {
+    e.preventDefault()
+    fileInputActive = false
+  }
+
+  const handleUpload = () => {
+    const fileChunks = createFileChunks(file)
+  }
 </script>
+
 
 <div class="uploader-container">
   <input type="file" id="file" on:change={handleFileChange} />
   <label class="file-input" class:active={fileInputActive} for="file" on:dragover={handleDragOver} on:dragleave={handleDragLeave} on:drop={handleDrop}>{fileInputActive ? '松开确定' : '选择文件'}</label>
 
-  <button class="upload-btn">
-    上传文件
-  </button>
+  <button class="upload-btn" on:click={handleUpload}>上传文件</button>
 </div>
 
 {#if file}
